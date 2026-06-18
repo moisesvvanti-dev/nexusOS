@@ -1,0 +1,13 @@
+bash
+dash
+coreutils
+usr-is-merged
+systemd-sysv
+sudo
+live-boot
+live-config
+locales
+keyboard-configuration
+ca-certificates
+apt-transport-https
+linux-image-amd64

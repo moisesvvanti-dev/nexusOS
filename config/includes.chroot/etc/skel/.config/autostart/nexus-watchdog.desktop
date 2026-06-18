@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Nexus Watchdog
+Comment=Reparo visual e funcional em tempo real para a sessão NexusOS
+Exec=nexus-watchdog
+Terminal=false
+X-GNOME-Autostart-enabled=true

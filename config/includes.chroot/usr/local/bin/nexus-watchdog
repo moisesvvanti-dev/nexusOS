@@ -1,0 +1,37 @@
+#!/bin/bash
+set -Eeuo pipefail
+INTERVAL="${NEXUS_WATCHDOG_INTERVAL:-20}"
+LOG_DIR="${NEXUS_LOG_DIR:-$HOME/.nexus/logs}"
+mkdir -p "$LOG_DIR"
+LOG="$LOG_DIR/watchdog.log"
+
+log(){ printf '[%s] %s
+' "$(date -Is)" "$*" | tee -a "$LOG"; }
+repair_xfce_panel(){
+  if command -v pgrep >/dev/null 2>&1 && ! pgrep -x xfce4-panel >/dev/null 2>&1; then
+    log "xfce4-panel caiu; reiniciando painel visual."
+    nohup xfce4-panel >/dev/null 2>&1 &
+  fi
+}
+repair_window_manager(){
+  if command -v pgrep >/dev/null 2>&1 && ! pgrep -x xfwm4 >/dev/null 2>&1; then
+    log "xfwm4 caiu; reiniciando gerenciador de janelas."
+    nohup xfwm4 --replace >/dev/null 2>&1 &
+  fi
+}
+check_disk(){
+  usage=$(df -P "$HOME" 2>/dev/null | awk 'NR==2 {gsub("%","",$5); print $5}')
+  if [ "${usage:-0}" -ge 95 ]; then
+    log "Disco quase cheio (${usage}%). Limpando caches de usuário seguros."
+    rm -rf "$HOME/.cache/thumbnails"/* "$HOME/.cache/fontconfig"/* 2>/dev/null || true
+  fi
+}
+
+log "Nexus Watchdog iniciado. Intervalo=${INTERVAL}s"
+while true; do
+  nexus-hardware-profile >/dev/null 2>&1 || true
+  repair_xfce_panel
+  repair_window_manager
+  check_disk
+  sleep "$INTERVAL"
+done

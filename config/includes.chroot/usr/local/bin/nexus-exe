@@ -1,0 +1,57 @@
+#!/bin/bash
+set -Eeuo pipefail
+NEXUS_HOME="${NEXUS_HOME:-$HOME/.nexus}"
+PREFIX_ROOT="$NEXUS_HOME/exe-prefixes"
+DEFAULT_PREFIX="$PREFIX_ROOT/default"
+mkdir -p "$DEFAULT_PREFIX" "$NEXUS_HOME/logs"
+export WINEPREFIX="${WINEPREFIX:-$DEFAULT_PREFIX}"
+export WINEDEBUG="${WINEDEBUG:--all}"
+LOG="$NEXUS_HOME/logs/nexus-exe-$(date +%Y%m%d-%H%M%S).log"
+
+need() { command -v "$1" >/dev/null 2>&1 || { echo "Falta dependência: $1"; return 1; }; }
+if ! need wine; then
+  echo "Nexus EXE Runtime requer wine/wine64."
+  exit 1
+fi
+
+self_repair_prefix() {
+  echo "[*] Verificando prefixo Nexus EXE em $WINEPREFIX"
+  mkdir -p "$WINEPREFIX"
+  if [[ ! -d "$WINEPREFIX/drive_c" ]]; then
+    echo "[*] Inicializando prefixo Wine isolado..."
+    wineboot -u >>"$LOG" 2>&1 || true
+  fi
+}
+
+install_common_runtime() {
+  if command -v winetricks >/dev/null 2>&1; then
+    echo "[*] Instalando runtimes comuns no prefixo atual..."
+    winetricks -q corefonts vcrun2019 dxvk >>"$LOG" 2>&1 || true
+  else
+    echo "winetricks não encontrado; pulando runtimes comuns."
+  fi
+}
+
+run_target() {
+  local target="$1"
+  if [[ ! -f "$target" ]]; then
+    echo "Arquivo não encontrado: $target"
+    exit 1
+  fi
+  self_repair_prefix
+  echo "[*] Nexus EXE Runtime"
+  echo "    Prefixo: $WINEPREFIX"
+  echo "    Log: $LOG"
+  case "${target,,}" in
+    *.msi) wine msiexec /i "$target" 2>&1 | tee -a "$LOG" ;;
+    *) wine "$target" 2>&1 | tee -a "$LOG" ;;
+  esac
+}
+
+case "${1:-}" in
+  --repair) self_repair_prefix; install_common_runtime ;;
+  --prefix) echo "$WINEPREFIX" ;;
+  --help|-h) echo "Uso: nexus-exe [--repair|--prefix|arquivo.exe|arquivo.msi]" ;;
+  "") read -erp "Caminho do .exe/.msi: " target; run_target "$target" ;;
+  *) run_target "$1" ;;
+esac

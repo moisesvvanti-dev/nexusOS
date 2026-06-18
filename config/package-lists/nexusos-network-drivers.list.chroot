@@ -1,0 +1,291 @@
+# NexusOS Network Drivers and Hardware Support
+# Additional drivers and tools for Kali Linux
+
+# =============================================================================
+# NETWORK HARDWARE FIRMWARE
+# =============================================================================
+# Wired network
+firmware-realtek
+firmware-intel-sound
+firmware-ipw2x00
+firmware-ivtv
+
+# Wireless Atheros
+firmware-atheros
+
+# Wireless Intel
+firmware-iwlwifi
+
+# Wireless Broadcom
+firmware-brcm80211
+
+# Wireless Ralink/MediaTek
+firmware-ralink
+firmware-misc-nonfree
+
+# AMD/NVIDIA GPU (for display)
+firmware-amd-graphics
+firmware-nvidia-graphics
+
+# Misc firmware
+firmware-linux
+firmware-linux-free
+firmware-samsung
+firmware-ti-connectivity
+firmware-zd1211
+
+# =============================================================================
+# NETWORK DIAGNOSTIC TOOLS
+# =============================================================================
+# Advanced network analysis
+nmap
+masscan
+netdiscover
+zenmap
+
+# Packet capture
+wireshark
+tshark
+tcpdump
+ettercap-text-only
+
+# Network scanning
+netcat-openbsd
+socat
+p0f
+fragroute
+fragrouter
+
+# Traffic analysis
+darkstat
+ntopng
+bandwidthd
+
+# DNS tools
+dnsenum
+dnsrecon
+dnsmap
+fierce
+
+# =============================================================================
+# MOBILE/BROADBAND SUPPORT
+# =============================================================================
+# ModemManager and related
+modemmanager
+mobile-broadband-provider-info
+usb-modeswitch
+usbmuxd
+libimobiledevice6
+ideviceinstaller
+ifuse
+
+# Android
+android-tools-adb
+android-tools-fastboot
+simpleburn
+
+# MTP
+mtp-tools
+jmtpfs
+go-mtpfs
+gvfs-backends
+gvfs-fuse
+
+# =============================================================================
+# VIRTUALIZATION & TUNNELING
+# =============================================================================
+# VPN
+openvpn
+openvpn-auth-ldap
+network-manager-openvpn
+network-manager-openvpn-gnome
+
+# SSH
+openssh-client
+openssh-server
+sshfs
+
+# Tunneling
+stunnel4
+httptunnel
+udptunnel
+ptunnel
+
+# Virtual networking
+uml-utilities
+bridge-utils
+vlan
+
+# =============================================================================
+# BLUETOOTH
+# =============================================================================
+# Bluetooth stack
+bluetooth
+bluez
+bluez-firmware
+bluez-tools
+blueman
+
+# Bluetooth analysis
+btscanner
+bluelog
+bluemino
+blueranger
+spooftooph
+ BLEah
+ rfcat
+
+# =============================================================================
+# WIFI/802.11
+# =============================================================================
+# Wireless tools
+aircrack-ng
+airgraph-ng
+airbase-ng
+airdecloak-ng
+aireplay-ng
+airmon-ng
+airodump-ng
+airolib-ng
+besside-ng
+easside-ng
+fragrouter
+packetforge-ng
+wesside-ng
+
+# Wireless discovery
+kismet
+kismet-plugins
+wiggle
+wash
+
+# =============================================================================
+# HARDWARE DETECTION
+# =============================================================================
+# Hardware info
+hwinfo
+lshw
+lshw-gtk
+hardinfo
+inxi
+
+# PCI/USB devices
+pciutils
+usbutils
+dmidecode
+decode-dimms
+
+# Disk/RAID
+smartmontools
+lsscsi
+megacli
+storcli
+
+# Temperature/Power
+lm-sensors
+thermald
+tp-smapi-dkms
+acpi
+acpi-support
+
+# Process info
+htop
+btop
+iotop
+powertop
+
+# =============================================================================
+# FILESYSTEM & STORAGE
+# =============================================================================
+# Network filesystems
+cifs-utils
+nfs-common
+sshfs
+fuse
+fuse-utils
+
+# Disk tools
+parted
+gparted
+fdisk
+gdisk
+dosfstools
+exfat-fuse
+exfat-utils
+ntfs-3g
+
+# UUID/blkid
+uuid-runtime
+blkid
+
+# =============================================================================
+# SYSTEM ADMINISTRATION
+# =============================================================================
+# Process management
+procps
+psmisc
+coreutils
+
+# User management
+adduser
+sudo
+passwd
+
+# Time sync
+chrony
+ntpdate
+ntp
+
+# Cron
+cron
+anacron
+fcron
+
+# Log management
+rsyslog
+logrotate
+
+# =============================================================================
+# REMOTE ACCESS
+# =============================================================================
+remmina
+remmina-plugin-rdp
+remmina-plugin-vnc
+remmina-plugin-secret
+remmina-plugin-spice
+
+# =============================================================================
+# ADDITIONAL UTILITIES
+# =============================================================================
+net-tools           # legacy ifconfig, route, etc.
+iproute2            # modern ip command
+iputils-ping        # ping
+iputils-tracepath   # tracepath
+traceroute          # traceroute
+mtr-tiny            # mtr
+tracepath6
+iputils-ping
+
+# DNS
+dnsutils            # dig, nslookup
+bind9-dnsutils
+
+# DHCP
+isc-dhcp-client
+isc-dhcp-server
+
+# LDAP
+ldap-utils
+libnss-ldap
+libpam-ldap
+
+# NSS
+libnss-winbind
+libnss-ldapd
+nss-updatedb
+
+#================================================================================
+# KERNEL MODULES
+#================================================================================
+# These are built into kernel but listed for awareness
+# usbnet, cdc_ether, rndis_host, ipheth, bnep, etc.

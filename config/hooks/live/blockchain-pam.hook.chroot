@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e
+
+echo "Configurando PAM para autenticacao blockchain..."
+
+# Adiciona o script de autenticação blockchain como um passo de auth
+if ! grep -q "blockchain-auth" /etc/pam.d/common-auth; then
+    echo "auth optional pam_exec.so expose_authtok /usr/local/bin/blockchain-auth" >> /etc/pam.d/common-auth
+fi

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Nexus AI
+Comment=Assistente local com Ollama e skills offline
+Exec=nexus-jarvis
+Icon=nexus-ai
+Terminal=true
+Type=Application
+Categories=Utility;Development;
+Keywords=ia;ai;ollama;skills;nexus;

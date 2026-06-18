@@ -1,0 +1,34 @@
+#!/bin/bash
+set -Eeuo pipefail
+MEM_KB=$(awk '/MemTotal/ {print $2}' /proc/meminfo 2>/dev/null || echo 0)
+MEM_MB=$((MEM_KB / 1024))
+GPU="none"
+if command -v lspci >/dev/null 2>&1 && lspci | grep -Eiq 'vga|3d|display'; then
+  GPU="present"
+fi
+MODE="balanced"
+if [ "$MEM_MB" -gt 0 ] && [ "$MEM_MB" -le 1200 ]; then
+  MODE="ultra-low-ram"
+elif [ "$GPU" = "none" ]; then
+  MODE="no-gpu-safe"
+fi
+mkdir -p /var/lib/nexusos
+printf 'mode=%s
+mem_mb=%s
+gpu=%s
+' "$MODE" "$MEM_MB" "$GPU" >/var/lib/nexusos/hardware-profile
+
+echo "Nexus hardware profile: $MODE (${MEM_MB}MB RAM, GPU=$GPU)"
+
+# Ajustes em tempo real para sessão XFCE quando executado pelo usuário.
+if command -v xfconf-query >/dev/null 2>&1; then
+  case "$MODE" in
+    ultra-low-ram|no-gpu-safe)
+      xfconf-query -c xfwm4 -p /general/use_compositing -s false 2>/dev/null || true
+      xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/dpms-enabled -s true 2>/dev/null || true
+      ;;
+    *)
+      xfconf-query -c xfwm4 -p /general/use_compositing -s true 2>/dev/null || true
+      ;;
+  esac
+fi

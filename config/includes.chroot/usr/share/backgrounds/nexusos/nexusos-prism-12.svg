@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3840" height="2160" viewBox="0 0 3840 2160">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="22%" r="82%">
+      <stop offset="0%" stop-color="#39d7ff" stop-opacity=".95"/>
+      <stop offset="32%" stop-color="#151c44"/>
+      <stop offset="72%" stop-color="#080b1a"/>
+      <stop offset="100%" stop-color="#02030a"/>
+    </radialGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".26"/>
+      <stop offset="1" stop-color="#7dd3fc" stop-opacity=".06"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#00e5ff"/>
+      <stop offset=".48" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#ff4ecd"/>
+    </linearGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="36"/></filter>
+    <filter id="soft"><feDropShadow dx="0" dy="28" stdDeviation="28" flood-color="#000" flood-opacity=".45"/></filter>
+  </defs>
+  <rect width="3840" height="2160" fill="url(#bg)"/>
+  <circle cx="680" cy="360" r="360" fill="#00e5ff" opacity=".22" filter="url(#blur)"/>
+  <circle cx="3140" cy="420" r="430" fill="#a855f7" opacity=".20" filter="url(#blur)"/>
+  <circle cx="2120" cy="1780" r="560" fill="#ff4ecd" opacity=".10" filter="url(#blur)"/>
+  <g opacity=".32" stroke="#e0f2fe" stroke-width="2">
+    <path d="M0 1580 C760 1320 1120 1720 1860 1450 S2980 980 3840 1270" fill="none"/>
+    <path d="M0 1660 C760 1400 1120 1800 1860 1530 S2980 1060 3840 1350" fill="none" opacity=".45"/>
+  </g>
+  <rect x="510" y="380" width="2820" height="1280" rx="72" fill="url(#glass)" stroke="#dbeafe" stroke-opacity=".18" filter="url(#soft)"/>
+  <rect x="760" y="1765" width="2320" height="132" rx="66" fill="#050816" fill-opacity=".64" stroke="#e0f2fe" stroke-opacity=".16" filter="url(#soft)"/>
+  <g transform="translate(1920 1010)" filter="url(#soft)">
+    <path d="M0 -420 L342 -178 L262 232 L0 420 L-262 232 L-342 -178 Z" fill="#020617" fill-opacity=".72" stroke="url(#accent)" stroke-width="24"/>
+    <path d="M0 -270 L192 -136 L148 134 L0 270 L-148 134 L-192 -136 Z" fill="none" stroke="#e0f2fe" stroke-opacity=".65" stroke-width="18"/>
+    <circle cx="0" cy="0" r="72" fill="url(#accent)"/>
+    <path d="M0 -270 L0 -72 M192 -136 L62 -36 M148 134 L62 36 M0 270 L0 72 M-148 134 L-62 36 M-192 -136 L-62 -36" stroke="#67e8f9" stroke-width="16" stroke-linecap="round"/>
+  </g>
+  <text x="1920" y="1502" fill="#f8fbff" font-family="Segoe UI Variable, Inter, Noto Sans, Arial, sans-serif" font-size="142" font-weight="800" text-anchor="middle" letter-spacing="-4">NexusOS Prism</text>
+  <text x="1920" y="1588" fill="#bae6fd" font-family="Segoe UI Variable, Inter, Noto Sans, Arial, sans-serif" font-size="42" text-anchor="middle">Interface prismática inspirada no futuro • identidade original • IA local • privacidade</text>
+</svg>

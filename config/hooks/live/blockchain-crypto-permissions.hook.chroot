@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+
+echo "Ajustando permissoes dos scripts de blockchain..."
+chmod +x /usr/local/bin/blockchain-auth || true

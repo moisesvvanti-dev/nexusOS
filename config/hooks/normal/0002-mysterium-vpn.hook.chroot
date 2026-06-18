@@ -1,0 +1,26 @@
+#!/bin/sh
+set -e
+
+echo "I: Download and install Mysterium VPN Desktop (Blockchain VPN)"
+
+# Install dependencies if not already installed
+apt-get update
+apt-get install -y wget curl gnupg ca-certificates
+
+# Attempt to download the latest Mysterium VPN Desktop via GitHub API
+DOWNLOAD_URL=$(curl -s https://api.github.com/repos/mysteriumnetwork/mysterium-vpn-desktop/releases/latest | grep "browser_download_url" | grep "mysterium-vpn-desktop_.*_amd64.deb" | cut -d '"' -f 4 | head -n 1)
+
+if [ -z "$DOWNLOAD_URL" ]; then
+    echo "W: Could not find Mysterium VPN .deb url, falling back to a known release..."
+    DOWNLOAD_URL="https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases/download/10.15.5/mysterium-vpn-desktop_10.15.5_amd64.deb"
+fi
+
+echo "I: Downloading $DOWNLOAD_URL"
+wget -qO /tmp/mysterium-vpn.deb "$DOWNLOAD_URL"
+
+echo "I: Installing Mysterium VPN..."
+dpkg -i /tmp/mysterium-vpn.deb || apt-get install -f -y
+
+# Clean up
+rm -f /tmp/mysterium-vpn.deb
+echo "I: Mysterium VPN Desktop installation completed."

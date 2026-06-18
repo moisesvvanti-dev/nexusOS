@@ -1,0 +1,39 @@
+#!/bin/bash
+set -Eeuo pipefail
+clear
+if ! command -v flatpak >/dev/null 2>&1; then
+  echo "Flatpak não está instalado nesta imagem."
+  exit 1
+fi
+if ! flatpak remotes --columns=name 2>/dev/null | grep -qx flathub; then
+  echo "Adicionando Flathub..."
+  flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+fi
+while true; do
+  echo "========== Nexus Store =========="
+  echo "1) Abrir loja gráfica"
+  echo "2) Instalar pacote essencial (Firefox, VLC, OBS, GIMP, VSCodium)"
+  echo "3) Buscar app no Flathub"
+  echo "4) Atualizar Flatpaks"
+  echo "5) Reparar instalação Flatpak"
+  echo "0) Sair"
+  read -rp "Escolha: " op
+  case "$op" in
+    1)
+      if command -v gnome-software >/dev/null 2>&1; then
+        nohup gnome-software >/dev/null 2>&1 &
+      else
+        echo "gnome-software não encontrado; use as opções em terminal."
+      fi
+      ;;
+    2) flatpak install -y flathub org.mozilla.firefox org.videolan.VLC com.obsproject.Studio org.gimp.GIMP com.vscodium.codium ;;
+    3) read -rp "Termo de busca: " q; flatpak search "$q" ;;
+    4) flatpak update -y ;;
+    5) flatpak repair --user; sudo flatpak repair --system || true ;;
+    0) exit 0 ;;
+    *) echo "Opção inválida." ;;
+  esac
+  echo
+  read -rp "Enter para continuar..." _
+  clear
+done

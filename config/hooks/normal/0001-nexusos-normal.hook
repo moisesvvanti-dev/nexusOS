@@ -1,0 +1,4 @@
+#!/bin/sh
+set -e
+echo "NexusOS normal hook: build environment OK"
+exit 0

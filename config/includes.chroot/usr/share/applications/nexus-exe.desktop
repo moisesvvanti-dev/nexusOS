@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Nexus EXE Bridge
+Comment=Executar programas .exe via Wine com diagnóstico automático
+Exec=nexus-exe
+Icon=nexus-exe
+Terminal=true
+Type=Application
+Categories=Utility;Emulator;
+Keywords=exe;wine;windows;compatibilidade;nexus;

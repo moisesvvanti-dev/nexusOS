@@ -1,0 +1,13 @@
+[Unit]
+Description=NexusOS Universal Hardware Profile
+DefaultDependencies=no
+After=local-fs.target
+Before=display-manager.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/nexus-hardware-profile
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

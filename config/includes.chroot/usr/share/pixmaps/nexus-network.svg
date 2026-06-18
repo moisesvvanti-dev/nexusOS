@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="netGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4d96ff"/>
+      <stop offset="50%" style="stop-color:#9b59b6"/>
+      <stop offset="100%" style="stop-color:#6bcb77"/>
+    </linearGradient>
+    
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a2a3a"/>
+      <stop offset="100%" style="stop-color:#0a1628"/>
+    </linearGradient>
+    
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="256" height="256" rx="48" fill="url(#bgGrad)"/>
+  
+  <!-- Network connections - WiFi waves -->
+  <g stroke="url(#netGrad)" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.8" filter="url(#glow)">
+    <path d="M78 120 Q128 80 178 120" />
+    <path d="M68 135 Q128 65 188 135" />
+    <path d="M58 150 Q128 50 198 150" />
+  </g>
+  
+  <!-- Central hub -->
+  <circle cx="128" cy="170" r="24" fill="url(#netGrad)" filter="url(#glow)"/>
+  <circle cx="128" cy="170" r="12" fill="#ffffff"/>
+  
+  <!-- USB symbol -->
+  <g transform="translate(128, 170)" stroke="#ffffff" stroke-width="2" fill="none">
+    <rect x="-30" y="-8" width="60" height="16" rx="4"/>
+    <line x1="-15" y1="-8" x2="-15" y2="8"/>
+    <line x1="-5" y1="-8" x2="-5" y2="8"/>
+    <line x1="5" y1="-8" x2="5" y2="8"/>
+    <line x1="15" y1="-8" x2="15" y2="8"/>
+  </g>
+  
+  <!-- Bluetooth symbol -->
+  <g transform="translate(200, 90)">
+    <path d="M0 0 L15 10 L0 20 L5 10 Z M0 20 L15 30 L0 40 L5 30 Z" 
+          stroke="#4d96ff" stroke-width="2" fill="none" opacity="0.7"/>
+  </g>
+  
+  <!-- Connection dots -->
+  <g fill="#ffffff" opacity="0.5">
+    <circle cx="50" cy="90" r="5"/>
+    <circle cx="206" cy="90" r="5"/>
+    <circle cx="50" cy="166" r="5"/>
+    <circle cx="206" cy="166" r="5"/>
+  </g>
+  
+  <!-- Mobile device indicator -->
+  <g transform="translate(40, 60) rotate(-30)">
+    <rect x="-12" y="-20" width="24" height="40" rx="4" fill="none" stroke="#6bcb77" stroke-width="2"/>
+    <line x1="-6" y1="12" x2="6" y2="12" stroke="#6bcb77" stroke-width="2"/>
+  </g>
+  
+  <!-- Tethering indicator text -->
+  <text x="128" y="220" font-family="Arial, sans-serif" font-size="10" fill="#ffffff" fill-opacity="0.6" text-anchor="middle">
+    TETHERING
+  </text>
+</svg>

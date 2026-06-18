@@ -1,0 +1,13 @@
+#!/bin/bash
+echo "========== NexusOS Jarvis AI =========="
+if ! command -v ollama >/dev/null 2>&1; then
+  echo "Ollama não vem na ISO por padrão para reduzir tamanho."
+  echo "Instalar agora? [s/N]"
+  read -r ans
+  if [[ "$ans" =~ ^[sS]$ ]]; then
+    curl -fsSL https://ollama.com/install.sh | sh
+  else
+    exit 0
+  fi
+fi
+ollama run llama3.2

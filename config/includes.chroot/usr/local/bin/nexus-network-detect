@@ -1,0 +1,19 @@
+#!/bin/bash
+echo "===== NexusOS Network/Device Detect ====="
+echo
+echo "[USB]"
+lsusb || true
+echo
+echo "[PCI]"
+lspci || true
+echo
+echo "[Network interfaces]"
+ip link || true
+echo
+echo "[NetworkManager devices]"
+nmcli device status || true
+echo
+echo "[Mobile broadband/modem]"
+mmcli -L || true
+echo
+echo "Tethering USB: conecte o celular via USB, ative Roteador USB/Tethering USB e abra NetworkManager."

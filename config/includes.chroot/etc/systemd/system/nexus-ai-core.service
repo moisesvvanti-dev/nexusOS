@@ -1,0 +1,12 @@
+[Unit]
+Description=Nexus AI Core - Self Healing & Memory Engine
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/nexus-ai-engine daemon
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

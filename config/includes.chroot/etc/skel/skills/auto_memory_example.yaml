@@ -1,0 +1,9 @@
+name: auto_memory_example
+description: "Essa é uma memória gerada automaticamente pela IA."
+type: self_improvement
+trigger: "system_error_detected"
+action:
+  - "Verificar log de erros do debsums"
+  - "Corrigir permissões ou reinstalar pacote problemático"
+learnings:
+  - "Não tentar modificar arquivos protegidos pelo apt sem lock."

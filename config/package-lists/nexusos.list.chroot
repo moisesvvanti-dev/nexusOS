@@ -1,0 +1,320 @@
+# NexusOS Core Package List for Kali Base
+# Based on Kali Linux Rolling
+
+# =============================================================================
+# CORE SYSTEM
+# =============================================================================
+# Linux Kernel - Using Kali's kernel packages
+linux-image-amd64
+linux-headers-amd64
+
+# Firmware
+firmware-linux
+firmware-misc-nonfree
+firmware-atheros
+firmware-brcm80211
+firmware-iwlwifi
+firmware-realtek
+
+# Core system
+systemd
+systemd-sysv
+udev
+libudev1
+init
+init-system-helpers
+
+# =============================================================================
+# NETWORK & CONNECTIVITY
+# =============================================================================
+# Network Manager
+network-manager
+network-manager-gnome
+modemmanager
+mobile-broadband-provider-info
+usb-modeswitch
+
+# Network tools
+iproute2
+iputils-ping
+iputils-arping
+dnsutils
+net-tools
+traceroute
+mtr-tiny
+dhcpcd5
+
+# Wireless
+wpasupplicant
+wireless-tools
+rfkill
+iw
+crda
+
+# Bluetooth
+bluetooth
+bluez
+blueman
+bluez-firmware
+
+# =============================================================================
+# DESKTOP ENVIRONMENT
+# =============================================================================
+# Xfce4 Desktop
+xfce4
+xfce4-goodies
+xfce4-terminal
+xfce4-taskmanager
+xfce4-screenshooter
+xfce4-clipman
+xfce4-notifyd
+xfce4-pulseaudio-plugin
+xfce4-battery-plugin
+xfce4-genmon-plugin
+xfce4-mail-watcher-plugin
+xfce4-mpc-plugin
+xfce4-datetime-plugin
+xfce4-dict
+xfce4-ssh-askpass
+xfce4-indicator-plugin
+xfce4-xkb-plugin
+
+# Display Manager
+lightdm
+lightdm-gtk-greeter
+light-locker
+
+# GTK/GNOME deps
+gtk2-engines
+gtk3-engines
+arc-theme
+adwaita-icon-theme
+gnome-icon-theme
+gnome-themes-standard
+numix-gtk-theme
+
+# Fonts
+fonts-noto
+fonts-noto-color-emoji
+fonts-dejavu
+fonts-droid-fallback
+fonts-liberation
+fonts-opensymbol
+fonts-oxygen
+fonts-symbola
+fonts-ubuntu
+
+# Icons
+papirus-icon-theme
+hicolor-icon-theme
+adwaita-icon-theme
+
+# =============================================================================
+# NEXUSOS SPECIFIC
+# =============================================================================
+# NexusOS custom scripts (installed via hooks)
+# nexus-tethering-detect
+# nexus-network-monitor
+
+# =============================================================================
+# PRODUCTIVITY & UTILITIES
+# =============================================================================
+# File managers
+thunar
+thunar-archive-plugin
+thunar-media-tags-plugin
+file-roller
+xarchiver
+
+# Editors
+mousepad
+vim
+nano
+gedit
+gedit-plugins
+
+# System tools
+htop
+btop
+neofetch
+gnome-system-monitor
+gnome-disk-utility
+gnome-calculator
+gnome-clocks
+gnome-calendar
+gnome-calculator
+
+# Images
+gimp
+gimp-data-extras
+gimp-plugin-registry
+eog
+shotwell
+
+# Media
+vlc
+vlc-plugin-base
+ffmpeg
+gstreamer1.0-plugins-base
+gstreamer1.0-plugins-good
+gstreamer1.0-plugins-bad
+gstreamer1.0-plugins-ugly
+gstreamer1.0-libav
+
+# Internet
+chromium
+firefox-esr
+transmission
+filezilla
+
+# =============================================================================
+# WINE & WINDOWS COMPATIBILITY
+# =============================================================================
+wine
+wine64
+wine32
+winetricks
+winbind
+
+# =============================================================================
+# DEVELOPMENT
+# =============================================================================
+git
+build-essential
+gcc
+g++
+make
+cmake
+automake
+autoconf
+libtool
+pkg-config
+python3
+python3-pip
+python3-dev
+python3-venv
+python3-setuptools
+python3-wheel
+
+# =============================================================================
+# SECURITY & PENETRATION TESTING (Kali Base)
+# =============================================================================
+# Information gathering
+nmap
+masscan
+netdiscover
+zenmap
+
+# Vulnerability analysis
+openvas
+nikto
+legion
+
+# Web application analysis
+owasp-zap
+burpsuite
+
+# Database assessment
+sqlmap
+
+# Password attacks
+hashcat
+john
+
+# Wireless attacks
+aircrack-ng
+wireshark
+tcpdump
+tshark
+ettercap-graphical
+fern-wifi-cracker
+ghost-phisher
+kismet
+
+# Reverse engineering
+radare2
+rizin
+
+# Exploitation
+metasploit-framework
+msfpc
+
+# Social engineering
+set
+
+# =============================================================================
+# SYSTEM & HARDWARE
+# =============================================================================
+# Drivers
+xorg
+xserver-xorg
+xserver-xorg-video-all
+xserver-xorg-input-all
+xserver-xorg-legacy
+
+# Mesa/GPU
+mesa-utils
+vulkan-tools
+clinfo
+mesa-vulkan-drivers
+
+# Input devices
+xinput
+x11-xserver-utils
+
+# Accessibility
+at-spi2-core
+orca
+onboard
+
+# =============================================================================
+# PYTHON MODULES FOR NEXUS
+# =============================================================================
+python3-yaml
+python3-jinja2
+python3-requests
+python3-pil
+python3-numpy
+
+# =============================================================================
+# COMPRESSION & ARCHIVES
+# =============================================================================
+unzip
+zip
+p7zip-full
+rar
+unrar
+tar
+gzip
+bzip2
+xz-utils
+
+# =============================================================================
+# MISC
+# =============================================================================
+bash-completion
+bashdb
+cron
+logrotate
+rsync
+screen
+tmux
+jq
+bc
+dc
+wget
+curl
+ncftp
+lftp
+openssh-client
+openssh-server
+sudo
+locate
+which
+file
+md5deep
+sha256deep
+time
+tree
+xdot
+graphviz

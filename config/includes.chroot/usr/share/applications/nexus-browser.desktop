@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Nexus Browser
+Comment=Browser proprietário NexusOS Chromium-based sem telemetria e com antirrastreamento
+Exec=nexus-browser %U
+Icon=nexus-browser
+Terminal=false
+Type=Application
+Categories=Network;WebBrowser;
+MimeType=text/html;text/xml;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;
+Keywords=browser;web;privacidade;ads;anti-tracking;nexus;

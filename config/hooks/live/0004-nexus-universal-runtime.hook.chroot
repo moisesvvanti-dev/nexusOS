@@ -1,0 +1,5 @@
+#!/bin/bash
+set -e
+systemctl enable nexus-hardware-profile.service || true
+chmod +x /usr/local/bin/nexus-browser /usr/local/bin/nexus-exe /usr/local/bin/nexus-hardware-profile /usr/local/bin/nexus-watchdog || true
+chmod +x /etc/skel/Desktop/*.desktop || true

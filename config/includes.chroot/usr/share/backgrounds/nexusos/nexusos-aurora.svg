@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3840 2160">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a1a"/>
+      <stop offset="30%" style="stop-color:#0f1629"/>
+      <stop offset="60%" style="stop-color:#1a1040"/>
+      <stop offset="100%" style="stop-color:#0d1a2d"/>
+    </linearGradient>
+    
+    <linearGradient id="prismGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff3366">
+        <animate attributeName="stop-color" values="#ff3366;#ff6b35;#ffd93d;#6bcb77;#4d96ff;#9b59b6;#ff3366" dur="10s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%" style="stop-color:#4d96ff">
+        <animate attributeName="stop-color" values="#4d96ff;#9b59b6;#ff3366;#ff6b35;#ffd93d;#6bcb77;#4d96ff" dur="10s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" style="stop-color:#9b59b6">
+        <animate attributeName="stop-color" values="#9b59b6;#4d96ff;#6bcb77;#ffd93d;#ff6b35;#ff3366;#9b59b6" dur="10s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+    
+    <linearGradient id="nebula" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a0a2e;stop-opacity:0.8"/>
+      <stop offset="50%" style="stop-color:#16213e;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#0a1628;stop-opacity:0.8"/>
+    </linearGradient>
+    
+    <radialGradient id="glow1" cx="30%" cy="40%" r="50%">
+      <stop offset="0%" style="stop-color:#ff6b35;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#ff6b35;stop-opacity:0"/>
+    </radialGradient>
+    
+    <radialGradient id="glow2" cx="70%" cy="60%" r="50%">
+      <stop offset="0%" style="stop-color:#4d96ff;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#4d96ff;stop-opacity:0"/>
+    </radialGradient>
+    
+    <radialGradient id="glow3" cx="50%" cy="30%" r="40%">
+      <stop offset="0%" style="stop-color:#9b59b6;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#9b59b6;stop-opacity:0"/>
+    </radialGradient>
+    
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="20" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="3840" height="2160" fill="url(#bgGrad)"/>
+  
+  <!-- Nebula clouds -->
+  <ellipse cx="800" cy="600" rx="1200" ry="800" fill="url(#glow1)"/>
+  <ellipse cx="2800" cy="1400" rx="1400" ry="900" fill="url(#glow2)"/>
+  <ellipse cx="1920" cy="400" rx="1000" ry="600" fill="url(#glow3)"/>
+  
+  <!-- Stars -->
+  <g fill="#ffffff" opacity="0.8">
+    <circle cx="200" cy="150" r="1.5"><animate attributeName="opacity" values="0.8;0.2;0.8" dur="3s" repeatCount="indefinite"/></circle>
+    <circle cx="450" cy="300" r="1"><animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/></circle>
+    <circle cx="700" cy="200" r="2"><animate attributeName="opacity" values="0.7;0.3;0.7" dur="4s" repeatCount="indefinite"/></circle>
+    <circle cx="1100" cy="450" r="1.2"><animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/></circle>
+    <circle cx="1400" cy="180" r="1.5"><animate attributeName="opacity" values="0.8;0.4;0.8" dur="3.5s" repeatCount="indefinite"/></circle>
+    <circle cx="1700" cy="350" r="1"><animate attributeName="opacity" values="0.5;0.9;0.5" dur="2s" repeatCount="indefinite"/></circle>
+    <circle cx="2000" cy="120" r="1.8"><animate attributeName="opacity" values="0.7;0.2;0.7" dur="3s" repeatCount="indefinite"/></circle>
+    <circle cx="2350" cy="280" r="1.3"><animate attributeName="opacity" values="0.6;1;0.6" dur="2.8s" repeatCount="indefinite"/></circle>
+    <circle cx="2600" cy="400" r="1"><animate attributeName="opacity" values="0.4;0.8;0.4" dur="3.2s" repeatCount="indefinite"/></circle>
+    <circle cx="2900" cy="180" r="1.6"><animate attributeName="opacity" values="0.8;0.3;0.8" dur="2.6s" repeatCount="indefinite"/></circle>
+    <circle cx="3200" cy="300" r="1.2"><animate attributeName="opacity" values="0.5;1;0.5" dur="3.8s" repeatCount="indefinite"/></circle>
+    <circle cx="3500" cy="150" r="1.4"><animate attributeName="opacity" values="0.7;0.4;0.7" dur="2.4s" repeatCount="indefinite"/></circle>
+    <circle cx="3700" cy="400" r="1"><animate attributeName="opacity" values="0.6;0.9;0.6" dur="3s" repeatCount="indefinite"/></circle>
+    <circle cx="150" cy="500" r="1.1"><animate attributeName="opacity" values="0.5;0.8;0.5" dur="2.9s" repeatCount="indefinite"/></circle>
+    <circle cx="350" cy="700" r="1.3"><animate attributeName="opacity" values="0.7;0.3;0.7" dur="3.4s" repeatCount="indefinite"/></circle>
+    <circle cx="500" cy="900" r="1"><animate attributeName="opacity" values="0.4;0.8;0.4" dur="2.7s" repeatCount="indefinite"/></circle>
+    <circle cx="900" cy="800" r="1.5"><animate attributeName="opacity" values="0.8;0.5;0.8" dur="3.1s" repeatCount="indefinite"/></circle>
+    <circle cx="1200" cy="950" r="1.2"><animate attributeName="opacity" values="0.6;0.9;0.6" dur="2.5s" repeatCount="indefinite"/></circle>
+    <circle cx="1600" cy="750" r="1.4"><animate attributeName="opacity" values="0.5;0.8;0.5" dur="3.6s" repeatCount="indefinite"/></circle>
+    <circle cx="2100" cy="850" r="1.1"><animate attributeName="opacity" values="0.7;0.4;0.7" dur="2.8s" repeatCount="indefinite"/></circle>
+    <circle cx="2500" cy="920" r="1.6"><animate attributeName="opacity" values="0.8;0.3;0.8" dur="3.3s" repeatCount="indefinite"/></circle>
+    <circle cx="2800" cy="780" r="1"><animate attributeName="opacity" values="0.4;0.7;0.4" dur="2.6s" repeatCount="indefinite"/></circle>
+    <circle cx="3100" cy="850" r="1.3"><animate attributeName="opacity" values="0.6;0.9;0.6" dur="3.7s" repeatCount="indefinite"/></circle>
+    <circle cx="3400" cy="920" r="1.2"><animate attributeName="opacity" values="0.5;0.8;0.5" dur="2.9s" repeatCount="indefinite"/></circle>
+    <circle cx="3600" cy="750" r="1.4"><animate attributeName="opacity" values="0.7;0.3;0.7" dur="3.2s" repeatCount="indefinite"/></circle>
+  </g>
+  
+  <!-- Hexagon grid pattern -->
+  <g stroke="#ffffff" stroke-opacity="0.03" fill="none" stroke-width="1">
+    <polygon points="1920,200 2020,250 2020,350 1920,400 1820,350 1820,250"/>
+    <polygon points="1720,280 1820,330 1820,430 1720,480 1620,430 1620,330"/>
+    <polygon points="2120,280 2220,330 2220,430 2120,480 2020,430 2020,330"/>
+    <polygon points="1520,360 1620,410 1620,510 1520,560 1420,510 1420,410"/>
+    <polygon points="2320,360 2420,410 2420,510 2320,560 2220,510 2220,410"/>
+    <polygon points="1920,440 2020,490 2020,590 1920,640 1820,590 1820,490"/>
+  </g>
+  
+  <!-- Central prism/hexagon glow -->
+  <g transform="translate(1920, 1080)" filter="url(#softGlow)">
+    <polygon points="0,-200 173,-100 173,100 0,200 -173,100 -173,-100" fill="url(#prismGrad)" opacity="0.9"/>
+    <polygon points="0,-150 130,-75 130,75 0,150 -130,75 -130,-75" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.5"/>
+    <polygon points="0,-100 87,-50 87,50 0,100 -87,50 -87,-50" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.3"/>
+  </g>
+  
+  <!-- Prism rays -->
+  <g stroke="url(#prismGrad)" stroke-width="2" opacity="0.3" filter="url(#glow)">
+    <line x1="1920" y1="880" x2="1920" y2="100" stroke-dasharray="10,5">
+      <animate attributeName="stroke-dashoffset" values="0;30" dur="2s" repeatCount="indefinite"/>
+    </line>
+    <line x1="1920" y1="880" x2="1200" y2="300" stroke-dasharray="10,5">
+      <animate attributeName="stroke-dashoffset" values="0;30" dur="2.5s" repeatCount="indefinite"/>
+    </line>
+    <line x1="1920" y1="880" x2="2640" y2="300" stroke-dasharray="10,5">
+      <animate attributeName="stroke-dashoffset" values="0;30" dur="2.2s" repeatCount="indefinite"/>
+    </line>
+    <line x1="1920" y1="880" x2="800" y2="700" stroke-dasharray="10,5">
+      <animate attributeName="stroke-dashoffset" values="0;30" dur="2.8s" repeatCount="indefinite"/>
+    </line>
+    <line x1="1920" y1="880" x2="3040" y2="700" stroke-dasharray="10,5">
+      <animate attributeName="stroke-dashoffset" values="0;30" dur="2.4s" repeatCount="indefinite"/>
+    </line>
+  </g>
+  
+  <!-- Floating particles -->
+  <g fill="#ffffff" opacity="0.6">
+    <circle cx="1500" cy="600" r="3">
+      <animate attributeName="cy" values="600;580;600" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;0.2;0.6" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="2350" cy="750" r="2">
+      <animate attributeName="cy" values="750;730;750" dur="3.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.4;0.8;0.4" dur="3.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1800" cy="1200" r="2.5">
+      <animate attributeName="cy" values="1200;1220;1200" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0.2;0.5" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="2050" cy="950" r="2">
+      <animate attributeName="cy" values="950;970;950" dur="4.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;0.3;0.6" dur="4.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Text: NEXUS OS -->
+  <text x="1920" y="1450" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="#ffffff" text-anchor="middle" filter="url(#glow)">
+    NEXUS OS
+    <animate attributeName="opacity" values="0.9;1;0.9" dur="3s" repeatCount="indefinite"/>
+  </text>
+  
+  <!-- Text: AURORA -->
+  <text x="1920" y="1550" font-family="Arial, sans-serif" font-size="36" fill="url(#prismGrad)" text-anchor="middle" letter-spacing="12">
+    AURORA
+    <animate attributeName="letter-spacing" values="12;16;12" dur="4s" repeatCount="indefinite"/>
+  </text>
+  
+  <!-- Version info -->
+  <text x="1920" y="1700" font-family="Arial, sans-serif" font-size="18" fill="#ffffff" fill-opacity="0.5" text-anchor="middle">
+    Based on Kali Linux | Version 12.0.0
+  </text>
+  
+  <!-- Bottom tagline -->
+  <text x="1920" y="2000" font-family="Arial, sans-serif" font-size="16" fill="#ffffff" fill-opacity="0.4" text-anchor="middle">
+    Security • Privacy • Performance • Tethering Detection
+  </text>
+</svg>

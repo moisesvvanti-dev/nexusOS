@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Nexus Store
+Comment=Instalar, atualizar e reparar aplicativos do NexusOS
+Exec=nexus-store
+Icon=nexus-store
+Terminal=true
+Type=Application
+Categories=System;PackageManager;
+Keywords=apps;loja;flatpak;software;nexus;

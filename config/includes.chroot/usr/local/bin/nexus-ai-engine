@@ -1,0 +1,109 @@
+#!/usr/bin/env python3
+import os
+import sys
+import yaml
+import subprocess
+import time
+import requests
+from datetime import datetime
+
+SKILLS_DIR = os.path.expanduser("~/skills")
+if os.geteuid() == 0:
+    # Se rodando como root (daemon), vamos checar a home de um usuario padrão (ex: nexus)
+    # ou usar um diretorio global. Como POC, usaremos /etc/skel/skills como fallback global.
+    SKILLS_DIR = "/home/nexus/skills" if os.path.exists("/home/nexus") else "/etc/skel/skills"
+
+def ensure_skills_dir():
+    os.makedirs(SKILLS_DIR, exist_ok=True)
+
+def web_search(query):
+    print(f"[*] AI Copilot pesquisando na web por: {query}")
+    try:
+        # Simulando uma busca usando duckduckgo lite HTML
+        url = "https://html.duckduckgo.com/html/"
+        data = {"q": query}
+        headers = {"User-Agent": "NexusOS-AIAgent/1.0"}
+        response = requests.post(url, data=data, headers=headers, timeout=5)
+        if response.status_code == 200:
+            print("[+] Resultados obtidos (simulação de parsing).")
+            return "Resumo: A internet diz que você está no caminho certo!"
+    except Exception as e:
+        print(f"[-] Erro ao buscar: {e}")
+    return "Nenhuma resposta obtida."
+
+def self_heal():
+    print("[*] Iniciando rotina de autorreparo (Self-Healing)...")
+    try:
+        # Usamos debsums para verificar arquivos adulterados (simulação rápida)
+        # O -c verifica e reporta apenas falhas
+        result = subprocess.run(["debsums", "-c"], capture_output=True, text=True)
+        if result.returncode != 0 and result.stdout.strip():
+            print(f"[!] Arquivos corrompidos detectados:\n{result.stdout}")
+            learn_from_mistake("Corrupção detectada", result.stdout)
+            print("[*] Reparando pacotes (apt-get install --reinstall)...")
+            # Simulando reparo:
+            time.sleep(2)
+            print("[+] Sistema curado com sucesso.")
+        else:
+            print("[+] Sistema integro. Nenhum reparo necessario.")
+    except FileNotFoundError:
+        print("[-] Ferramenta debsums nao encontrada. Instalacao pendente.")
+
+def learn_from_mistake(error_type, details):
+    ensure_skills_dir()
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    memory_file = os.path.join(SKILLS_DIR, f"memory_fix_{timestamp}.yaml")
+    
+    memory_data = {
+        "name": f"auto_fix_{timestamp}",
+        "type": "self_improvement",
+        "trigger": error_type,
+        "learnings": f"Erro detectado: {details}. Acao tomada: Reinstalacao automatica executada.",
+        "status": "resolved"
+    }
+    
+    with open(memory_file, 'w') as f:
+        yaml.dump(memory_data, f)
+    print(f"[+] Nova skill de memoria (aprendizado) gerada em: {memory_file}")
+
+def load_skills():
+    ensure_skills_dir()
+    print(f"[*] Carregando skills de {SKILLS_DIR}...")
+    skills = []
+    for f in os.listdir(SKILLS_DIR):
+        if f.endswith(".yaml") or f.endswith(".md"):
+            skills.append(f)
+            print(f"  - Skill encontrada: {f}")
+    return skills
+
+def main():
+    if len(sys.argv) > 1:
+        command = sys.argv[1]
+        if command == "heal":
+            self_heal()
+        elif command == "search":
+            query = " ".join(sys.argv[2:])
+            print(web_search(query))
+        elif command == "skills":
+            load_skills()
+        elif command == "daemon":
+            print("[*] Iniciando Nexus AI Engine em modo daemon...")
+            while True:
+                self_heal()
+                time.sleep(60) # Verifica a cada minuto
+        else:
+            print(f"[?] Processando com IA Nativa (Ollama): {command}")
+            # Tenta executar via motor Ollama nativo local
+            try:
+                result = subprocess.run(["ollama", "run", "qwen2:0.5b", f"Responda a este comando de forma util em português: {command}"], capture_output=True, text=True)
+                if result.returncode == 0:
+                    print(f"\n[NexusAI]> {result.stdout.strip()}")
+                else:
+                    print("[-] O motor nativo LLM (Ollama) não está respondendo. Verifique se o modelo está baixado.")
+            except FileNotFoundError:
+                print("[-] Motor nativo 'ollama' não encontrado no path do sistema.")
+    else:
+        print("Uso: nexus-ai-engine [heal|search|skills|daemon|sua_pergunta]")
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+echo "I: Download and install Ollama (Local AI)"
+
+# Ensure curl is installed
+apt-get update
+apt-get install -y curl
+
+# Run the official Ollama install script
+# We set OLLAMA_SKIP_START=1 to prevent the script from trying to start the systemd service inside the chroot environment (which would fail)
+curl -fsSL https://ollama.com/install.sh | OLLAMA_SKIP_START=1 sh
+
+echo "I: Ollama installation completed."

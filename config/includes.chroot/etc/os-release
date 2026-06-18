@@ -1,0 +1,15 @@
+NAME="NexusOS"
+VERSION="12.0.0 (Aurora)"
+ID=nexusos
+ID_LIKE=kali
+VERSION_ID="12.0.0"
+PRETTY_NAME="NexusOS Aurora"
+ANSI_COLOR="1;36"
+URL="https://nexusos.project"
+BUG_REPORT_URL="https://github.com/nexusos-project/nexusos/issues"
+PRIVACY_POLICY_URL="https://nexusos.project/privacy"
+LOGO=nexus-os
+VERSION_CODENAME=Aurora
+UBUNTU_CODENAME=aurora
+DOCUMENTATION_URL="https://docs.nexusos.project"
+SUPPORT_URL="https://support.nexusos.project"

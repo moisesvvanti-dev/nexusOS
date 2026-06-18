@@ -1,0 +1,9 @@
+export NEXUSOS=1
+alias cls='clear'
+alias dir='ls -la'
+alias ipconfig='ip addr'
+alias tasklist='ps aux'
+alias winver='cat /etc/os-release'
+alias store='nexus-store'
+alias jarvis='nexus-jarvis'
+alias exe='wine'

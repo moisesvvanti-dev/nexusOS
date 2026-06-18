@@ -1,0 +1,8 @@
+# Dependências para a IA Local e Self-Healing
+python3
+python3-pip
+python3-requests
+python3-yaml
+debsums
+curl
+wget

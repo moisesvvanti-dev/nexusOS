@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+
+echo "Ativando o Nexus AI Engine e Auto Aprimoramento..."
+chmod +x /usr/local/bin/nexus-ai-engine || true
+
+# Habilita o serviço
+systemctl enable nexus-ai-core

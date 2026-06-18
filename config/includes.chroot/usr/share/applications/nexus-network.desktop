@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Nexus NetScan
+Comment=Detectar redes, USB tethering, drivers e dispositivos
+Exec=nexus-network-detect
+Icon=nexus-network
+Terminal=true
+Type=Application
+Categories=System;Network;
+Keywords=wifi;rede;tethering;drivers;nexus;
