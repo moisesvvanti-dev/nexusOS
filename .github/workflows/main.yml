@@ -79,26 +79,26 @@ jobs:
           chmod +x build.sh
           ./build.sh 2>&1 | tee logs/build.log
 
+      - name: Debug build output
+        run: |
+          echo "=== Build log (last 150 lines) ==="
+          cat logs/build.log 2>/dev/null | tail -150 || echo "No build.log"
+          echo ""
+          echo "=== out/ directory ==="
+          ls -lah out/ 2>/dev/null || echo "empty/missing"
+          echo ""
+          echo "=== build/ directory ==="
+          ls -lah build/ 2>/dev/null | head -20 || echo "empty/missing"
+          echo "=== Done ==="
+
       - name: Upload logs
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: nexus-build-logs
+          name: nexus-build-logs-${{ github.run_number }}
           path: logs/
           retention-days: 7
           if-no-files-found: ignore
-
-      - name: Check ISO output
-        run: |
-          echo "=== Contents of out/ directory ==="
-          ls -lah out/ 2>/dev/null || echo "out/ directory empty or missing"
-          echo ""
-          echo "=== Contents of build/ directory ==="
-          ls -lah build/ 2>/dev/null | head -20
-          echo ""
-          echo "=== Checking for ISO files ==="
-          find . -name "*.iso" -type f 2>/dev/null
-          echo "=== Done ==="
 
       - name: Upload ISO
         uses: actions/upload-artifact@v6
@@ -119,7 +119,7 @@ jobs:
       contents: write
     steps:
       - name: Download ISO
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact/v6
         with:
           name: NexusOS-ISO
           path: out/
