@@ -88,6 +88,18 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
+      - name: Check ISO output
+        run: |
+          echo "=== Contents of out/ directory ==="
+          ls -lah out/ 2>/dev/null || echo "out/ directory empty or missing"
+          echo ""
+          echo "=== Contents of build/ directory ==="
+          ls -lah build/ 2>/dev/null | head -20
+          echo ""
+          echo "=== Checking for ISO files ==="
+          find . -name "*.iso" -type f 2>/dev/null
+          echo "=== Done ==="
+
       - name: Upload ISO
         uses: actions/upload-artifact@v6
         with:
@@ -96,7 +108,7 @@ jobs:
             out/*.iso
             out/*.sha256
           retention-days: 14
-          if-no-files-found: ignore
+          if-no-files-found: error
 
   release:
     name: Create Release
