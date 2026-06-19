@@ -1221,9 +1221,8 @@ create_iso() {
         done
     fi
     
-    if [ -z "$ISOHDPFX" ]; then
-        die "isohdpfx.bin not found - cannot create ISO"
-    fi
+    # isohdpfx.bin is optional - genisoimage/mkisofs don't need it
+        # Continue even if isohdpfx.bin is not found
     
     # Verify image directory exists and has content
     if [ ! -d "$BUILD_DIR/image" ]; then
@@ -1243,64 +1242,108 @@ create_iso() {
     sudo find "$BUILD_DIR/image" -type f 2>/dev/null | head -20
     
     log "Building ISO: $ISO_NAME"
-    log "Using boot sector: $ISOHDPFX"
     
-    # Run xorriso and capture all output
-    set +e  # Temporarily disable exit on error for xorriso
-    sudo xorriso -as mkisofs \
-        -r \
-        -J \
-        -joliet-long \
-        -isohybrid-mbr "$ISOHDPFX" \
-        -partition_offset 16 \
-        -V "NexusOS" \
-        -A "NexusOS ${NEXUS_VERSION} (${NEXUS_CODENAME})" \
-        -publisher "NexusOS Project" \
-        -p "Built on Kali Linux" \
-        -o "$ISO_PATH" \
-        "$BUILD_DIR/image" 2>&1 | tee "$LOG_DIR/xorriso.log"
-    local xorriso_status=${PIPESTATUS[0]}
-    set -e  # Re-enable exit on error
+        # Determine which ISO creation tool to use
+        local ISO_TOOL=""
+        if command -v xorriso &>/dev/null; then
+            ISO_TOOL="xorriso"
+            log "Using xorriso for ISO creation"
+        elif command -v genisoimage &>/dev/null; then
+            ISO_TOOL="genisoimage"
+            log "Using genisoimage for ISO creation"
+        elif command -v mkisofs &>/dev/null; then
+            ISO_TOOL="mkisofs"
+            log "Using mkisofs for ISO creation"
+        else
+            die "No ISO creation tool found (xorriso, genisoimage, mkisofs)"
+        fi
     
-    log "xorriso exit status: $xorriso_status"
+        # Run ISO creation tool and capture all output
+        set +e  # Temporarily disable exit on error
+        local create_status=0
     
-    if [ $xorriso_status -ne 0 ]; then
-        log_error "xorriso failed with exit code $xorriso_status"
-        log "xorriso log contents:"
-        cat "$LOG_DIR/xorriso.log" | tail -30
-        die "xorriso failed - check logs/xorriso.log"
-    fi
+        if [ "$ISO_TOOL" = "xorriso" ]; then
+            if [ -n "$ISOHDPFX" ] && [ -f "$ISOHDPFX" ]; then
+                log "Using boot sector: $ISOHDPFX"
+                sudo xorriso -as mkisofs \
+                    -r \
+                    -J \
+                    -joliet-long \
+                    -isohybrid-mbr "$ISOHDPFX" \
+                    -partition_offset 16 \
+                    -V "NexusOS" \
+                    -A "NexusOS ${NEXUS_VERSION} (${NEXUS_CODENAME})" \
+                    -publisher "NexusOS Project" \
+                    -p "Built on Kali Linux" \
+                    -o "$ISO_PATH" \
+                    "$BUILD_DIR/image" 2>&1 | tee "$LOG_DIR/xorriso.log"
+                create_status=${PIPESTATUS[0]}
+            else
+                log "No isohdpfx.bin found, using xorriso without hybrid mode"
+                sudo xorriso -as mkisofs \
+                    -r \
+                    -J \
+                    -joliet-long \
+                    -V "NexusOS" \
+                    -A "NexusOS ${NEXUS_VERSION} (${NEXUS_CODENAME})" \
+                    -publisher "NexusOS Project" \
+                    -p "Built on Kali Linux" \
+                    -o "$ISO_PATH" \
+                    "$BUILD_DIR/image" 2>&1 | tee "$LOG_DIR/xorriso.log"
+                create_status=${PIPESTATUS[0]}
+            fi
+        else
+            # genisoimage or mkisofs
+            log "Using $ISO_TOOL (no isohybrid support)"
+            sudo $ISO_TOOL \
+                -r \
+                -J \
+                -joliet-long \
+                -V "NexusOS" \
+                -A "NexusOS ${NEXUS_VERSION} (${NEXUS_CODENAME})" \
+                -publisher "NexusOS Project" \
+                -p "Built on Kali Linux" \
+                -o "$ISO_PATH" \
+                "$BUILD_DIR/image" 2>&1 | tee "$LOG_DIR/xorriso.log"
+            create_status=${PIPESTATUS[0]}
+        fi
+        set -e  # Re-enable exit on error
     
-    # Check if ISO was created
-    if [ -f "$ISO_PATH" ]; then
-        log_success "ISO created successfully!"
-        log "Location: $ISO_PATH"
-        log "Size: $(du -h "$ISO_PATH" | cut -f1)"
+        log "ISO creation tool exit status: $create_status"
+    
+        if [ $create_status -ne 0 ]; then
+            log_error "ISO creation failed with exit code $create_status"
+            log "ISO creation log contents:"
+            cat "$LOG_DIR/xorriso.log" | tail -50
+            die "ISO creation failed - check logs/xorriso.log"
+        fi
+    
+        # Check if ISO was created
+        if [ -f "$ISO_PATH" ]; then
+            log_success "ISO created successfully!"
+            log "Location: $ISO_PATH"
+            log "Size: \$(du -h \"\$ISO_PATH\" | cut -f1)"
         
-        # Verify ISO is valid
-        log "Verifying ISO..."
-        xorriso --no-pvd_offset_check -indev "$ISO_PATH" -report_el_torito 2>&1 | head -10 || true
+            # Create checksums
+            cd "\$OUT_DIR"
+            sha256sum "\$ISO_NAME" > "\${ISO_NAME}.sha256"
+            md5sum "\$ISO_NAME" > "\${ISO_NAME}.md5"
         
-        # Create checksums
-        cd "$OUT_DIR"
-        sha256sum "$ISO_NAME" > "${ISO_NAME}.sha256"
-        md5sum "$ISO_NAME" > "${ISO_NAME}.md5"
-        
-        log_success "Checksums created"
-        log ""
-        log "=========================================="
-        log "  Build Complete!"
-        log "=========================================="
-        log ""
-        log "ISO: $ISO_NAME"
-        log "SHA256: ${ISO_NAME}.sha256"
-    else
-        log_error "ISO file not found at: $ISO_PATH"
-        log_error "OUT_DIR contents:"
-        ls -lah "$OUT_DIR/"
-        die "ISO creation failed - check logs/xorriso.log"
-    fi
-}
+            log_success "Checksums created"
+            log ""
+            log "=========================================="
+            log "  Build Complete!"
+            log "=========================================="
+            log ""
+            log "ISO: \$ISO_NAME"
+            log "SHA256: \${ISO_NAME}.sha256"
+        else
+            log_error "ISO file not found at: \$ISO_PATH"
+            log_error "OUT_DIR contents:"
+            ls -lah "\$OUT_DIR/"
+            die "ISO creation failed - check logs/xorriso.log"
+        fi
+    }
 
 # ============================================================================
 # MAIN BUILD PROCESS

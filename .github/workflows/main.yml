@@ -60,13 +60,13 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq \
-            build-essential debootstrap squashfs-tools xorriso isolinux \
-            grub-pc-bin grub-efi-amd64-bin mtools parted fdisk dosfstools \
-            curl wget gnupg python3 python3-pip git || true
-          # Verify required files exist
-          ls -la /usr/lib/ISOLINUX/isohdpfx.bin 2>/dev/null || \
-            ls -la /usr/lib/syslinux/isohdpfx.bin 2>/dev/null || \
-            echo "WARNING: isohdpfx.bin not found"
+                      build-essential debootstrap squashfs-tools xorriso genisoimage \
+                      grub-pc-bin grub-efi-amd64-bin mtools parted fdisk dosfstools \
+                      curl wget gnupg python3 python3-pip git \
+                      syslinux syslinux-utils isolinux || true
+                    # Verify ISO creation tools
+                    echo "=== ISO creation tools ==="
+                    which xorriso genisoimage mkisofs 2>/dev/null || echo "none found"
 
       - name: Setup Kali repositories
         run: |
