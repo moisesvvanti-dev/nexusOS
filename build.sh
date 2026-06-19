@@ -1089,6 +1089,25 @@ cleanup_build() {
 create_squashfs() {
     log_section "Creating SquashFS Image"
     
+    # Verify rootfs exists and has content
+    if [ ! -d "$BUILD_DIR/rootfs" ]; then
+        die "Rootfs directory not found: $BUILD_DIR/rootfs"
+    fi
+    
+    local rootfs_files=$(sudo find "$BUILD_DIR/rootfs" -type f 2>/dev/null | wc -l)
+    log "Rootfs contains $rootfs_files files"
+    
+    if [ "$rootfs_files" -lt 100 ]; then
+        die "Rootfs appears incomplete (only $rootfs_files files) - check apt-get logs"
+    fi
+    
+    # Check if kernel exists in rootfs
+    if [ -d "$BUILD_DIR/rootfs/boot" ]; then
+        log "Boot contents: $(ls "$BUILD_DIR/rootfs/boot/" 2>/dev/null | tr '\n' ' ')"
+    else
+        log_warning "No /boot directory in rootfs - kernel may not be installed"
+    fi
+    
     log "Compressing root filesystem..."
     sudo mksquashfs "$BUILD_DIR/rootfs" \
         "$BUILD_DIR/image/squashfs" \
@@ -1108,10 +1127,31 @@ create_squashfs() {
 create_boot_image() {
     log_section "Creating Boot Image"
     
+    # Check if kernel exists in rootfs
+    if [ ! -d "$BUILD_DIR/rootfs/boot" ]; then
+        log_error "No /boot directory in rootfs!"
+        log "Attempting to install kernel..."
+        sudo chroot "$BUILD_DIR/rootfs" bash -c "DEBIAN_FRONTEND=noninteractive apt-get install -y linux-image-amd64" 2>/dev/null || true
+    fi
+    
+    # List available kernels
+    log "Available kernels in rootfs/boot:"
+    sudo ls -la "$BUILD_DIR/rootfs/boot/" 2>/dev/null || true
+    
     # Copy kernel and initrd
     if [ -d "$BUILD_DIR/rootfs/boot" ]; then
         log "Copying kernel and initrd..."
         sudo cp "$BUILD_DIR/rootfs/boot/"* "$BUILD_DIR/image/boot/" 2>/dev/null || true
+        
+        # Verify files were copied
+        local copied=$(sudo ls "$BUILD_DIR/image/boot/" 2>/dev/null | wc -l)
+        log "Copied $copied files to image/boot/"
+        
+        if [ "$copied" -eq 0 ]; then
+            log_warning "No kernel/initrd copied - ISO may not be bootable"
+        fi
+    else
+        log_warning "No /boot directory - ISO will not be bootable"
     fi
     
     # Create live boot config
@@ -1152,14 +1192,51 @@ create_iso() {
     ISO_NAME="NexusOS-${NEXUS_VERSION}-${NEXUS_CODENAME}-${ARCH}-${NEXUS_BUILD}.iso"
     ISO_PATH="$OUT_DIR/$ISO_NAME"
     
+    # Find isohdpfx.bin (different distros place it differently)
+    ISOHDPFX=""
+    for path in /usr/lib/ISOLINUX/isohdpfx.bin /usr/lib/syslinux/isohdpfx.bin /usr/share/syslinux/isohdpfx.bin; do
+        if [ -f "$path" ]; then
+            ISOHDPFX="$path"
+            break
+        fi
+    done
+    
+    if [ -z "$ISOHDPFX" ]; then
+        log "WARNING: isohdpfx.bin not found, trying to install isolinux..."
+        sudo apt-get install -y isolinux 2>/dev/null || true
+        for path in /usr/lib/ISOLINUX/isohdpfx.bin /usr/lib/syslinux/isohdpfx.bin /usr/share/syslinux/isohdpfx.bin; do
+            if [ -f "$path" ]; then
+                ISOHDPFX="$path"
+                break
+            fi
+        done
+    fi
+    
+    if [ -z "$ISOHDPFX" ]; then
+        die "isohdpfx.bin not found - cannot create ISO"
+    fi
+    
     log "Building ISO: $ISO_NAME"
+    log "Using boot sector: $ISOHDPFX"
+    
+    # Verify image directory exists and has content
+    if [ ! -d "$BUILD_DIR/image" ]; then
+        die "Build image directory not found: $BUILD_DIR/image"
+    fi
+    
+    local image_files=$(sudo find "$BUILD_DIR/image" -type f 2>/dev/null | wc -l)
+    log "Image directory contains $image_files files"
+    
+    if [ "$image_files" -eq 0 ]; then
+        die "Image directory is empty - build incomplete"
+    fi
     
     # Create ISO using xorriso
     sudo xorriso -as mkisofs \
         -r \
         -J \
         -joliet-long \
-        -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin \
+        -isohybrid-mbr "$ISOHDPFX" \
         -partition_offset 16 \
         -V "NexusOS" \
         -A "NexusOS ${NEXUS_VERSION} (${NEXUS_CODENAME})" \
@@ -1167,6 +1244,13 @@ create_iso() {
         -p "Built on Kali Linux" \
         -o "$ISO_PATH" \
         "$BUILD_DIR/image" 2>&1 | tee "$LOG_DIR/xorriso.log" | tail -20
+    
+    # Check if xorriso succeeded (PIPESTATUS[0] for first command in pipe)
+    local xorriso_status=${PIPESTATUS[0]}
+    
+    if [ $xorriso_status -ne 0 ]; then
+        die "xorriso failed with exit code $xorriso_status - check logs/xorriso.log"
+    fi
     
     if [ -f "$ISO_PATH" ]; then
         log_success "ISO created successfully!"
@@ -1187,7 +1271,7 @@ create_iso() {
         log "ISO: $ISO_NAME"
         log "SHA256: ${ISO_NAME}.sha256"
     else
-        die "ISO creation failed - check logs"
+        die "ISO creation failed - check logs/xorriso.log"
     fi
 }
 
