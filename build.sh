@@ -1189,14 +1189,22 @@ GRUB
 create_iso() {
     log_section "Creating ISO Image"
     
+    # Ensure output directory exists
+    sudo mkdir -p "$OUT_DIR"
+    
     ISO_NAME="NexusOS-${NEXUS_VERSION}-${NEXUS_CODENAME}-${ARCH}-${NEXUS_BUILD}.iso"
     ISO_PATH="$OUT_DIR/$ISO_NAME"
+    
+    log "ISO will be created at: $ISO_PATH"
+    log "OUT_DIR contents before ISO creation:"
+    sudo ls -lah "$OUT_DIR/" 2>/dev/null || echo "OUT_DIR empty or missing"
     
     # Find isohdpfx.bin (different distros place it differently)
     ISOHDPFX=""
     for path in /usr/lib/ISOLINUX/isohdpfx.bin /usr/lib/syslinux/isohdpfx.bin /usr/share/syslinux/isohdpfx.bin; do
         if [ -f "$path" ]; then
             ISOHDPFX="$path"
+            log "Found isohdpfx.bin at: $path"
             break
         fi
     done
@@ -1207,6 +1215,7 @@ create_iso() {
         for path in /usr/lib/ISOLINUX/isohdpfx.bin /usr/lib/syslinux/isohdpfx.bin /usr/share/syslinux/isohdpfx.bin; do
             if [ -f "$path" ]; then
                 ISOHDPFX="$path"
+                log "Found isohdpfx.bin after install at: $path"
                 break
             fi
         done
@@ -1216,22 +1225,28 @@ create_iso() {
         die "isohdpfx.bin not found - cannot create ISO"
     fi
     
-    log "Building ISO: $ISO_NAME"
-    log "Using boot sector: $ISOHDPFX"
-    
     # Verify image directory exists and has content
     if [ ! -d "$BUILD_DIR/image" ]; then
         die "Build image directory not found: $BUILD_DIR/image"
     fi
     
-    local image_files=$(sudo find "$BUILD_DIR/image" -type f 2>/dev/null | wc -l)
+    local image_files
+    image_files=$(sudo find "$BUILD_DIR/image" -type f 2>/dev/null | wc -l)
     log "Image directory contains $image_files files"
     
     if [ "$image_files" -eq 0 ]; then
         die "Image directory is empty - build incomplete"
     fi
     
-    # Create ISO using xorriso
+    # Show image directory contents
+    log "Image directory structure:"
+    sudo find "$BUILD_DIR/image" -type f 2>/dev/null | head -20
+    
+    log "Building ISO: $ISO_NAME"
+    log "Using boot sector: $ISOHDPFX"
+    
+    # Run xorriso and capture all output
+    set +e  # Temporarily disable exit on error for xorriso
     sudo xorriso -as mkisofs \
         -r \
         -J \
@@ -1243,19 +1258,28 @@ create_iso() {
         -publisher "NexusOS Project" \
         -p "Built on Kali Linux" \
         -o "$ISO_PATH" \
-        "$BUILD_DIR/image" 2>&1 | tee "$LOG_DIR/xorriso.log" | tail -20
-    
-    # Check if xorriso succeeded (PIPESTATUS[0] for first command in pipe)
+        "$BUILD_DIR/image" 2>&1 | tee "$LOG_DIR/xorriso.log"
     local xorriso_status=${PIPESTATUS[0]}
+    set -e  # Re-enable exit on error
+    
+    log "xorriso exit status: $xorriso_status"
     
     if [ $xorriso_status -ne 0 ]; then
-        die "xorriso failed with exit code $xorriso_status - check logs/xorriso.log"
+        log_error "xorriso failed with exit code $xorriso_status"
+        log "xorriso log contents:"
+        cat "$LOG_DIR/xorriso.log" | tail -30
+        die "xorriso failed - check logs/xorriso.log"
     fi
     
+    # Check if ISO was created
     if [ -f "$ISO_PATH" ]; then
         log_success "ISO created successfully!"
         log "Location: $ISO_PATH"
         log "Size: $(du -h "$ISO_PATH" | cut -f1)"
+        
+        # Verify ISO is valid
+        log "Verifying ISO..."
+        xorriso --no-pvd_offset_check -indev "$ISO_PATH" -report_el_torito 2>&1 | head -10 || true
         
         # Create checksums
         cd "$OUT_DIR"
@@ -1271,6 +1295,9 @@ create_iso() {
         log "ISO: $ISO_NAME"
         log "SHA256: ${ISO_NAME}.sha256"
     else
+        log_error "ISO file not found at: $ISO_PATH"
+        log_error "OUT_DIR contents:"
+        ls -lah "$OUT_DIR/"
         die "ISO creation failed - check logs/xorriso.log"
     fi
 }
